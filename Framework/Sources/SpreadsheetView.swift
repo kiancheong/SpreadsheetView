@@ -632,6 +632,34 @@ public class SpreadsheetView: UIView {
         }
     }
 
+	public func selectRow(at indexPath: IndexPath?, animated: Bool) {
+		guard let indexPath = indexPath else {
+			return
+		}
+		guard allowsSelection else {
+			return
+		}
+		guard allowsMultipleSelection == false else {
+			return
+		}
+		
+		selectedIndexPaths.removeAll()
+		deselectAllItems(animated: animated)
+		
+		
+		let startColumn = 0
+		let endColumn = numberOfColumns - 1
+		
+		for index in startColumn...endColumn {
+			let rowIndexPath = IndexPath(row: indexPath.row, column: index)
+			if selectedIndexPaths.insert(rowIndexPath).inserted {
+				cellsForItem(at: rowIndexPath).forEach {
+					$0.setSelected(true, animated: animated)
+				}
+			}
+		}
+	}
+
     public func deselectItem(at indexPath: IndexPath, animated: Bool) {
         cellsForItem(at: indexPath).forEach {
             $0.setSelected(false, animated: animated)
