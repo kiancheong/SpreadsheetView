@@ -632,30 +632,42 @@ public class SpreadsheetView: UIView {
         }
     }
 
-	public func selectRow(at indexPath: IndexPath?, animated: Bool) {
-		guard let indexPath = indexPath else {
-			return
-		}
+	public func selectRow(at indexPath: IndexPath, deselectOthers: Bool = false, animated: Bool) {
 		guard allowsSelection else {
 			return
 		}
-		guard allowsMultipleSelection == false else {
-			return
+		
+		if deselectOthers {
+			guard selectedIndexPaths.contains(indexPath) == false else {
+				return
+			}
+			
+			selectedIndexPaths.forEach { indexPath in
+				deselectItem(at: indexPath, animated: true)
+			}
 		}
-		
-		selectedIndexPaths.removeAll()
-		deselectAllItems(animated: animated)
-		
 		
 		let startColumn = 0
 		let endColumn = numberOfColumns - 1
 		
 		for index in startColumn...endColumn {
 			let rowIndexPath = IndexPath(row: indexPath.row, column: index)
-			if selectedIndexPaths.insert(rowIndexPath).inserted {
-				cellsForItem(at: rowIndexPath).forEach {
-					$0.setSelected(true, animated: animated)
-				}
+			selectedIndexPaths.insert(rowIndexPath)
+			cellsForItem(at: rowIndexPath).forEach {
+				$0.setSelected(true, animated: animated)
+			}
+		}
+	}
+	
+	public func deselectRow(at indexPath: IndexPath, animated: Bool) {
+		let startColumn = 0
+		let endColumn = numberOfColumns - 1
+		
+		for index in startColumn...endColumn {
+			let rowIndexPath = IndexPath(row: indexPath.row, column: index)
+			selectedIndexPaths.remove(rowIndexPath)
+			cellsForItem(at: rowIndexPath).forEach {
+				$0.setSelected(false, animated: animated)
 			}
 		}
 	}
