@@ -15,7 +15,6 @@ struct Address: Hashable {
     let columnIndex: Int
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(32768)
         hasher.combine(rowIndex)
         hasher.combine(columnIndex)
     }
