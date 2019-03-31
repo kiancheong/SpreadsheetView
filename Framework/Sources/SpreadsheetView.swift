@@ -642,9 +642,12 @@ public class SpreadsheetView: UIView {
 				return
 			}
 			
-			selectedIndexPaths.forEach { indexPath in
-				deselectItem(at: indexPath, animated: true)
+			indexPathsForVisibleItems.forEach { indexPath in
+				if selectedIndexPaths.contains(indexPath) {
+					deselectItem(at: indexPath, animated: true)
+				}
 			}
+			selectedIndexPaths.removeAll()
 		}
 		
 		let startColumn = 0
