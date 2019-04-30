@@ -682,7 +682,7 @@ public class SpreadsheetView: UIView {
         selectedIndexPaths.remove(indexPath)
     }
 
-    private func deselectAllItems(animated: Bool) {
+    public func deselectAllItems(animated: Bool) {
         selectedIndexPaths.forEach { deselectItem(at: $0, animated: animated) }
     }
 
